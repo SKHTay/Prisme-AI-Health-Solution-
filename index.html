@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boussole — Votre boussole dans l'IA en santé</title>
+<meta name="description" content="Outil d'exploration des startups françaises de l'IA en santé pour les décideurs d'établissements.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Centre d'Innovation et d'Usages en Santé
+   Cartographie IA en santé — feuille de style
+   Direction : éditorial / institutionnel "clinique calme"
+   ============================================================ */
+:root{
+  --ink:#14302E;          /* vert sapin profond — texte & primaire */
+  --ink-soft:#41605D;     /* texte secondaire */
+  --ink-faint:#7C918F;    /* labels, méta */
+  --paper:#F4F1E9;        /* fond papier chaud */
+  --paper-2:#FCFAF5;      /* cartes */
+  --line:rgba(20,48,46,.14);
+  --line-soft:rgba(20,48,46,.08);
+  --accent:#A6442A;       /* terre cuite — actions */
+  --accent-ink:#FFFFFF;
+  --focus:#1B7A62;
+  --shadow:0 1px 2px rgba(20,48,46,.05), 0 8px 24px -12px rgba(20,48,46,.25);
+  --shadow-lg:0 12px 40px -16px rgba(20,48,46,.35);
+  --radius:14px;
+  --maxw:1240px;
+
+  /* Couleurs par segment (assez sombres pour texte blanc, AA) */
+  --seg-imaging:#2A6076;
+  --seg-techbio:#4E6A30;
+  --seg-monitoring:#1B7A62;
+  --seg-workflows:#8A6418;
+  --seg-diagnostics:#7A4490;
+  --seg-data:#A6442A;
+  --seg-dtx:#A83D69;
+  --seg-robotics:#41507A;
+  --seg-security:#4F5862;
+  --seg-clinical:#1F7575;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:"Hanken Grotesk",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--ink);
+  background:var(--paper);
+  background-image:
+    radial-gradient(120% 80% at 100% 0%, rgba(27,122,98,.10), transparent 55%),
+    radial-gradient(90% 60% at 0% 0%, rgba(166,68,42,.07), transparent 50%);
+  background-attachment:fixed;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+a{color:inherit;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(16px,4vw,40px);}
+
+/* ---------- En-tête ---------- */
+.masthead{
+  border-bottom:1px solid var(--line);
+  padding-top:clamp(28px,5vw,56px);
+  padding-bottom:clamp(22px,3vw,34px);
+  animation:rise .7s cubic-bezier(.2,.7,.2,1) both;
+}
+.kicker{
+  font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;
+  font-weight:600;color:var(--accent);
+  display:flex;align-items:center;gap:.6em;margin-bottom:.9rem;
+}
+.kicker::before{content:"";width:26px;height:1px;background:var(--accent);display:inline-block;}
+.masthead h1{
+  font-family:"Fraunces",Georgia,serif;
+  font-weight:600;
+  font-size:clamp(2rem,5.2vw,3.5rem);
+  line-height:1.02;
+  letter-spacing:-.015em;
+  margin:0 0 .5rem;
+  max-width:18ch;
+}
+.masthead h1 em{font-style:italic;color:var(--ink-soft);font-weight:500;}
+.brandmark{display:flex;align-items:center;gap:.5em;margin-bottom:.2rem;}
+.brandmark h1{margin:0;}
+.brandmark svg{width:clamp(38px,5.5vw,56px);height:auto;flex:none;}
+.tagline{
+  font-family:"Fraunces",Georgia,serif;font-style:italic;font-weight:500;
+  font-size:clamp(1.05rem,2vw,1.4rem);color:var(--ink-soft);
+  margin:.15rem 0 1rem;
+}
+.lede{
+  font-size:clamp(1rem,1.6vw,1.18rem);
+  color:var(--ink-soft);
+  max-width:64ch;margin:0;
+}
+.stats{
+  display:flex;flex-wrap:wrap;gap:clamp(18px,3vw,40px);
+  margin-top:1.8rem;
+}
+.stat .n{font-family:"Fraunces",serif;font-size:1.7rem;font-weight:600;line-height:1;}
+.stat .l{font-size:.78rem;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.08em;margin-top:.25rem;}
+.note-exh{font-size:.8rem;color:var(--ink-faint);margin-top:1.3rem;font-style:italic;}
+
+/* ---------- Contrôles ---------- */
+.controls{
+  position:sticky;top:0;z-index:30;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 0;
+  animation:rise .7s .08s cubic-bezier(.2,.7,.2,1) both;
+}
+.controls-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+.search{position:relative;flex:1 1 320px;min-width:0;}
+.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--ink-faint);pointer-events:none;}
+.search input{
+  width:100%;font:inherit;font-size:1rem;
+  padding:13px 42px 13px 42px;
+  border:1px solid var(--line);border-radius:999px;
+  background:var(--paper-2);color:var(--ink);
+  transition:border-color .15s,box-shadow .15s;
+}
+.search input::placeholder{color:var(--ink-faint);}
+.search input:focus{outline:none;border-color:var(--focus);box-shadow:0 0 0 3px rgba(27,122,98,.18);}
+.search .clear{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  border:none;background:none;cursor:pointer;color:var(--ink-faint);
+  width:30px;height:30px;border-radius:50%;font-size:1.1rem;line-height:1;
+  display:none;align-items:center;justify-content:center;
+}
+.search .clear:hover{background:var(--line-soft);color:var(--ink);}
+.search.has-value .clear{display:flex;}
+
+.sort-wrap{display:flex;align-items:center;gap:8px;}
+.sort-wrap label{font-size:.82rem;color:var(--ink-faint);white-space:nowrap;}
+select{
+  font:inherit;font-size:.92rem;padding:11px 36px 11px 14px;
+  border:1px solid var(--line);border-radius:999px;background:var(--paper-2);
+  color:var(--ink);cursor:pointer;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2341605D' d='M6 8 0 0h12z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;
+}
+select:focus{outline:none;border-color:var(--focus);box-shadow:0 0 0 3px rgba(27,122,98,.18);}
+
+/* ---------- Filtres segments ---------- */
+.filters{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.chip{
+  font:inherit;font-size:.84rem;font-weight:500;
+  display:inline-flex;align-items:center;gap:7px;
+  padding:7px 14px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--line);background:var(--paper-2);color:var(--ink-soft);
+  transition:.15s;line-height:1.2;
+}
+.chip:hover{border-color:var(--ink-faint);color:var(--ink);}
+.chip .dot{width:9px;height:9px;border-radius:50%;background:var(--c);flex:none;}
+.chip .cnt{font-size:.74rem;color:var(--ink-faint);font-variant-numeric:tabular-nums;}
+.chip[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff;}
+.chip[aria-pressed="true"] .dot{background:rgba(255,255,255,.85);}
+.chip[aria-pressed="true"] .cnt{color:rgba(255,255,255,.8);}
+.chip:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(27,122,98,.3);}
+.reset{
+  font:inherit;font-size:.82rem;font-weight:600;color:var(--accent);
+  background:none;border:none;cursor:pointer;padding:7px 6px;border-radius:6px;
+  text-decoration:underline;text-underline-offset:3px;display:none;
+}
+.reset.show{display:inline;}
+.reset:hover{color:#7e3320;}
+
+/* ---------- Bandeau résultats ---------- */
+.meta-bar{
+  display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  flex-wrap:wrap;padding:26px 0 6px;
+}
+.count{font-family:"Fraunces",serif;font-size:1.05rem;font-weight:500;}
+.count b{font-weight:600;}
+
+/* ---------- Grille de cartes ---------- */
+.grid{
+  display:grid;gap:16px;padding-bottom:60px;
+  grid-template-columns:repeat(auto-fill,minmax(290px,1fr));
+}
+.card{
+  position:relative;background:var(--paper-2);border:1px solid var(--line);
+  border-left:4px solid var(--c,var(--ink-faint));
+  border-radius:var(--radius);padding:20px 20px 18px;
+  display:flex;flex-direction:column;gap:11px;
+  box-shadow:var(--shadow);transition:transform .18s,box-shadow .18s,border-color .18s;
+}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.card.selected{outline:2px solid var(--focus);outline-offset:0;}
+.card .seg{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:.7rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--c,var(--ink-faint));
+}
+.card .seg .dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex:none;}
+.card h3{
+  font-family:"Fraunces",serif;font-weight:600;font-size:1.22rem;
+  line-height:1.1;margin:0;letter-spacing:-.01em;
+}
+.card p{margin:0;color:var(--ink-soft);font-size:.92rem;flex:1;}
+.card .enrich{display:flex;flex-wrap:wrap;gap:6px;}
+.card .tag{font-size:.72rem;padding:3px 9px;border-radius:999px;background:var(--line-soft);color:var(--ink-soft);}
+.card .foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:4px;}
+.card .visit{
+  font-size:.84rem;font-weight:600;color:var(--accent);text-decoration:none;
+  display:inline-flex;align-items:center;gap:5px;border-radius:6px;
+}
+.card .visit:hover{text-decoration:underline;text-underline-offset:3px;}
+.card .visit svg{width:13px;height:13px;}
+.card .visit:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(27,122,98,.3);}
+.cmp-btn{
+  font:inherit;font-size:.78rem;font-weight:600;cursor:pointer;
+  border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);
+  padding:5px 11px;border-radius:999px;transition:.15s;white-space:nowrap;
+}
+.cmp-btn:hover{border-color:var(--ink-faint);color:var(--ink);}
+.cmp-btn.on{background:var(--ink);border-color:var(--ink);color:#fff;}
+.cmp-btn:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(27,122,98,.3);}
+.cmp-btn[disabled]{opacity:.4;cursor:not-allowed;}
+
+/* ---------- État vide ---------- */
+.empty{display:none;text-align:center;padding:70px 20px 90px;color:var(--ink-soft);}
+.empty.show{display:block;}
+.empty h3{font-family:"Fraunces",serif;font-weight:600;font-size:1.5rem;margin:0 0 .4rem;color:var(--ink);}
+.empty button{margin-top:1rem;font:inherit;font-weight:600;color:var(--accent);background:none;border:1px solid var(--accent);padding:9px 18px;border-radius:999px;cursor:pointer;}
+.empty button:hover{background:var(--accent);color:#fff;}
+
+/* ---------- Barre de comparaison ---------- */
+.tray{
+  position:fixed;left:0;right:0;bottom:0;z-index:40;
+  background:var(--ink);color:#fff;
+  transform:translateY(110%);transition:transform .28s cubic-bezier(.2,.7,.2,1);
+  box-shadow:0 -10px 40px -20px rgba(0,0,0,.6);
+}
+.tray.show{transform:translateY(0);}
+.tray-inner{display:flex;align-items:center;gap:16px;padding:14px 0;flex-wrap:wrap;}
+.tray .lbl{font-size:.82rem;color:rgba(255,255,255,.7);letter-spacing:.05em;text-transform:uppercase;font-weight:600;}
+.tray .items{display:flex;gap:8px;flex-wrap:wrap;flex:1;}
+.tray .pill{
+  display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);
+  padding:6px 8px 6px 13px;border-radius:999px;font-size:.86rem;font-weight:500;
+}
+.tray .pill button{background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:1rem;line-height:1;padding:0 2px;}
+.tray .pill button:hover{color:#fff;}
+.tray .actions{display:flex;gap:10px;}
+.btn-primary{
+  font:inherit;font-weight:600;font-size:.9rem;cursor:pointer;
+  background:var(--accent);color:#fff;border:none;padding:10px 18px;border-radius:999px;
+}
+.btn-primary:hover{background:#bb5237;}
+.btn-primary[disabled]{opacity:.45;cursor:not-allowed;}
+.btn-ghost{font:inherit;font-weight:600;font-size:.9rem;cursor:pointer;background:none;color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.3);padding:10px 16px;border-radius:999px;}
+.btn-ghost:hover{color:#fff;border-color:#fff;}
+
+/* ---------- Modale comparaison ---------- */
+.modal-bg{
+  position:fixed;inset:0;z-index:50;background:rgba(20,48,46,.5);
+  backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;
+  padding:clamp(16px,4vw,48px);overflow-y:auto;
+}
+.modal-bg.show{display:flex;}
+.modal{
+  background:var(--paper);border-radius:18px;max-width:1000px;width:100%;
+  box-shadow:var(--shadow-lg);animation:rise .35s cubic-bezier(.2,.7,.2,1) both;
+}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:22px 26px;border-bottom:1px solid var(--line);}
+.modal-head h2{font-family:"Fraunces",serif;font-weight:600;font-size:1.5rem;margin:0;}
+.modal-head button{background:none;border:none;font-size:1.6rem;cursor:pointer;color:var(--ink-soft);line-height:1;width:38px;height:38px;border-radius:50%;}
+.modal-head button:hover{background:var(--line-soft);color:var(--ink);}
+.cmp-grid{display:grid;gap:1px;background:var(--line);padding:1px;}
+.cmp-col{background:var(--paper-2);padding:22px;display:flex;flex-direction:column;gap:12px;}
+.cmp-col .seg{font-size:.7rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--c);display:inline-flex;align-items:center;gap:6px;}
+.cmp-col .seg .dot{width:8px;height:8px;border-radius:50%;background:currentColor;}
+.cmp-col h3{font-family:"Fraunces",serif;font-size:1.3rem;margin:0;}
+.cmp-col p{margin:0;color:var(--ink-soft);font-size:.92rem;flex:1;}
+.cmp-col a{font-size:.85rem;font-weight:600;color:var(--accent);text-decoration:none;}
+.cmp-col a:hover{text-decoration:underline;}
+
+/* ---------- Pied de page ---------- */
+footer{border-top:1px solid var(--line);padding:34px 0 50px;margin-top:20px;}
+footer .cols{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;}
+footer .brand{font-family:"Fraunces",serif;font-weight:600;font-size:1.05rem;}
+footer p{font-size:.82rem;color:var(--ink-faint);max-width:62ch;margin:.6rem 0 0;line-height:1.6;}
+footer .disclaimer{border-left:3px solid var(--accent);padding-left:14px;margin-top:18px;}
+
+/* ---------- Accessibilité & responsive ---------- */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
+@keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+@media (max-width:620px){
+  .controls-row{flex-direction:column;align-items:stretch;}
+  .sort-wrap{justify-content:space-between;}
+  .stats{gap:22px;}
+  .cmp-grid{grid-template-columns:1fr!important;}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="kicker">Centre d'Innovation et d'Usages en Santé</div>
+    <div class="brandmark">
+      <svg viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="24" cy="24" r="20" fill="none" stroke="var(--ink)" stroke-width="1.5"/>
+        <path d="M24 8 L29 24 L19 24 Z" fill="var(--accent)"/>
+        <path d="M24 40 L29 24 L19 24 Z" fill="var(--ink)"/>
+        <circle cx="24" cy="24" r="2.3" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.2"/>
+      </svg>
+      <h1>Boussole</h1>
+    </div>
+    <p class="tagline">Votre boussole dans l'IA en santé</p>
+    <p class="lede">Un outil d'exploration destiné aux décideurs d'établissements — directions générales, DSI, directions de l'innovation et médecins référents — pour repérer les solutions correspondant à leurs besoins.</p>
+    <div class="stats">
+      <div class="stat"><div class="n" id="stat-total">—</div><div class="l">Solutions référencées</div></div>
+      <div class="stat"><div class="n" id="stat-seg">—</div><div class="l">Domaines</div></div>
+    </div>
+    <p class="note-exh">Cartographie non exhaustive.</p>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="wrap">
+    <div class="controls-row">
+      <div class="search" id="searchBox">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <label for="q" class="sr-only">Rechercher une solution par nom ou par mot-clé</label>
+        <input type="search" id="q" placeholder="Rechercher : « imagerie », « télésurveillance », un nom…" autocomplete="off">
+        <button class="clear" id="clearQ" aria-label="Effacer la recherche">×</button>
+      </div>
+      <div class="sort-wrap">
+        <label for="sort">Trier</label>
+        <select id="sort">
+          <option value="alpha">Ordre alphabétique</option>
+          <option value="segment">Par domaine</option>
+        </select>
+      </div>
+    </div>
+    <div class="filters" id="filters" role="group" aria-label="Filtrer par domaine"></div>
+  </div>
+</div>
+
+<main class="wrap" id="main">
+  <div class="meta-bar">
+    <div class="count" id="count" aria-live="polite"></div>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty">
+    <h3>Aucune solution ne correspond</h3>
+    <p>Essayez d'élargir votre recherche ou de retirer des filtres.</p>
+    <button id="emptyReset">Réinitialiser les filtres</button>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap cols">
+    <div>
+      <div class="brand">Boussole</div>
+      <p>Votre boussole dans l'IA en santé — Centre d'Innovation et d'Usages en Santé.<br>Source des données : cartographie AI for Health — French Startup Mapping 2025 (mise à jour juin 2025).</p>
+    </div>
+    <div style="max-width:520px">
+      <p class="disclaimer">Cet outil est un répertoire d'orientation. Il ne constitue ni une recommandation, ni un classement, ni un avis sur la conformité réglementaire des solutions. Les informations — périmètre fonctionnel, marquage CE, statut de dispositif médical, interopérabilité, preuves cliniques — doivent être vérifiées directement auprès de chaque éditeur avant toute décision.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Barre de comparaison -->
+<div class="tray" id="tray" role="region" aria-label="Sélection pour comparaison">
+  <div class="wrap tray-inner">
+    <span class="lbl">Comparer</span>
+    <div class="items" id="trayItems"></div>
+    <div class="actions">
+      <button class="btn-ghost" id="trayClear">Vider</button>
+      <button class="btn-primary" id="trayCompare">Comparer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modale -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head">
+      <h2 id="modalTitle">Comparaison</h2>
+      <button id="modalClose" aria-label="Fermer la comparaison">×</button>
+    </div>
+    <div class="cmp-grid" id="cmpGrid"></div>
+  </div>
+</div>
+
+<script>
+/* ===== Données (embarquées, aucune dépendance réseau) ===== */
+const STARTUPS = [{"segment": "Medical Imaging & Simulation", "nom": "AIS", "site": "https://www.ais-medical.fr", "description": "Analyse IA d'images médicales pour améliorer la précision diagnostique"}, {"segment": "Medical Imaging & Simulation", "nom": "Allisone", "site": "https://www.allisone.co", "description": "IA dentaire : analyse automatique des radiographies pour aider les dentistes au diagnostic"}, {"segment": "Medical Imaging & Simulation", "nom": "Anapix Medical", "site": "https://www.anapix-medical.com", "description": "Analyse d'images médicales par IA pour la détection précoce"}, {"segment": "Medical Imaging & Simulation", "nom": "Austral DX", "site": "https://www.australdx.com", "description": "Diagnostics cardio-pulmonaires par IA à partir de radiographies"}, {"segment": "Medical Imaging & Simulation", "nom": "Avatar Medical", "site": "https://www.avatar-medical.com", "description": "Visualisation 3D médicale immersive pour la préparation chirurgicale"}, {"segment": "Medical Imaging & Simulation", "nom": "Avicenna.AI", "site": "https://www.avicenna.ai", "description": "Triage IA des urgences neurologiques : détection AVC, hémorragies cérébrales"}, {"segment": "Medical Imaging & Simulation", "nom": "Azmed", "site": "https://www.azmed.co", "description": "Détection automatique des fractures par IA sur radiographies standard"}, {"segment": "Medical Imaging & Simulation", "nom": "BrightHeart", "site": "https://www.brightheart.ai", "description": "Echographie cardiaque fœtale augmentée par IA pour cardiopathies congénitales"}, {"segment": "Medical Imaging & Simulation", "nom": "Caiman", "site": "https://www.caiman.ai", "description": "Analyse IA d'imagerie médicale pour la détection de pathologies"}, {"segment": "Medical Imaging & Simulation", "nom": "Chipiron", "site": "https://www.chipiron.com", "description": "IRM portable et low-field accessible hors plateau technique"}, {"segment": "Medical Imaging & Simulation", "nom": "Deemea", "site": "https://www.deemea.com", "description": "Analyse IA des pathologies dermatologiques sur images cliniques"}, {"segment": "Medical Imaging & Simulation", "nom": "CASIS", "site": "https://www.casis.fr", "description": "Simulation chirurgicale et imagerie médicale avancée"}, {"segment": "Medical Imaging & Simulation", "nom": "Damae Medical", "site": "https://www.damae-medical.com", "description": "Imagerie optique cutanée in vivo : diagnostic non-invasif du mélanome"}, {"segment": "Medical Imaging & Simulation", "nom": "Deski", "site": "https://www.deski.fr", "description": "Aide à la décision en imagerie médicale"}, {"segment": "Medical Imaging & Simulation", "nom": "Diagnoly", "site": "https://www.diagnoly.com", "description": "Diagnostic IA à partir d'imagerie médicale"}, {"segment": "Medical Imaging & Simulation", "nom": "Ekinnox", "site": "https://www.ekinnox.com", "description": "Analyse du mouvement par IA pour rééducation et orthopédie"}, {"segment": "Medical Imaging & Simulation", "nom": "Epsidy", "site": "https://www.epsidy.com", "description": "Imagerie médicale augmentée par IA"}, {"segment": "Medical Imaging & Simulation", "nom": "Femanov", "site": "https://www.femanov.com", "description": "Imagerie gynécologique assistée par IA"}, {"segment": "Medical Imaging & Simulation", "nom": "Gleamer", "site": "https://www.gleamer.ai", "description": "Détection IA d'anomalies radiologiques en flux de travail radiologues"}, {"segment": "Medical Imaging & Simulation", "nom": "Hera-MI", "site": "https://www.hera-mi.com", "description": "Dépistage du cancer du sein par IA : prédiction du risque et aide au diagnostic"}, {"segment": "Medical Imaging & Simulation", "nom": "Huvy", "site": "https://www.huvy.com", "description": "Simulation médicale interactive pour formation chirurgicale"}, {"segment": "Medical Imaging & Simulation", "nom": "HyprView", "site": "https://www.hyprview.com", "description": "Analyse IA d'IRM cérébrales et visualisation avancée"}, {"segment": "Medical Imaging & Simulation", "nom": "ImVitro", "site": "https://www.imvitro.com", "description": "Analyse IA en FIV : sélection des embryons par deep learning"}, {"segment": "Medical Imaging & Simulation", "nom": "Incepto", "site": "https://www.incepto-medical.com", "description": "Plateforme de déploiement et certification d'IA en imagerie médicale"}, {"segment": "Medical Imaging & Simulation", "nom": "inHEART", "site": "https://www.inheart.eu", "description": "Modélisation 3D cardiaque pour planification de l'ablation de fibrillation auriculaire"}, {"segment": "Medical Imaging & Simulation", "nom": "InSimo", "site": "https://www.insimo.fr", "description": "Simulation chirurgicale réaliste pour formation et planification"}, {"segment": "Medical Imaging & Simulation", "nom": "Lutèce Dynamics", "site": "https://www.lutecedynamics.com", "description": "Simulation biomédicale numérique et jumeaux numériques"}, {"segment": "Medical Imaging & Simulation", "nom": "Mata", "site": "https://www.mata.ai", "description": "Analyse IA ophtalmologique : dépistage rétinopathies"}, {"segment": "Medical Imaging & Simulation", "nom": "MatricsAI", "site": "https://www.matricsai.com", "description": "IA pour l'histologie numérique et l'anatomopathologie"}, {"segment": "Medical Imaging & Simulation", "nom": "Milvue", "site": "https://www.milvue.com", "description": "IA de triage en imagerie d'urgence : priorisation automatique des cas critiques"}, {"segment": "Medical Imaging & Simulation", "nom": "Nurea", "site": "https://www.nurea.fr", "description": "Modélisation vasculaire 3D par IA pour chirurgie aortique"}, {"segment": "Medical Imaging & Simulation", "nom": "Olea Medical", "site": "https://www.olea-medical.com", "description": "Post-traitement d'imagerie cérébrale avancé pour neurologie"}, {"segment": "Medical Imaging & Simulation", "nom": "Paire", "site": "https://www.paire-healthcare.com", "description": "Radiologie augmentée par IA pour améliorer la productivité des radiologues"}, {"segment": "Medical Imaging & Simulation", "nom": "Pixience", "site": "https://www.pixience.com", "description": "Imagerie dermatologique IA pour diagnostic et suivi"}, {"segment": "Medical Imaging & Simulation", "nom": "PrediSurge", "site": "https://www.predisurge.com", "description": "Planification chirurgicale vasculaire par IA et simulation CFD"}, {"segment": "Medical Imaging & Simulation", "nom": "QuantaCell", "site": "https://www.quantacell.com", "description": "Imagerie cellulaire quantitative et analyse IA"}, {"segment": "Medical Imaging & Simulation", "nom": "RadioLogs", "site": "https://www.radiologs.com", "description": "Structuration automatique des comptes-rendus radiologiques par IA"}, {"segment": "Medical Imaging & Simulation", "nom": "Raidium", "site": "https://www.raidium.com", "description": "Comptes-rendus radiologiques automatisés par IA (NLP + vision)"}, {"segment": "Medical Imaging & Simulation", "nom": "RebrAIn", "site": "https://www.rebrain.ai", "description": "IA en neuroimagerie : analyse IRM cerveau"}, {"segment": "Medical Imaging & Simulation", "nom": "Resolve Stroke", "site": "https://www.resolvestroke.com", "description": "Aide au diagnostic AVC par imagerie IA et accélération prise en charge"}, {"segment": "Medical Imaging & Simulation", "nom": "Sim&Cure", "site": "https://www.sim-and-cure.com", "description": "Simulation numérique pour planification du traitement des anévrismes"}, {"segment": "Medical Imaging & Simulation", "nom": "Simaptic", "site": "https://www.simaptic.ai", "description": "Simulation haute fidélité pour formation médicale et chirurgicale"}, {"segment": "Medical Imaging & Simulation", "nom": "SiVIEW", "site": "https://www.siview.fr", "description": "Visualisation et gestion d'imagerie médicale"}, {"segment": "Medical Imaging & Simulation", "nom": "Spectre Biotech", "site": "https://www.spectrebiotech.com", "description": "Spectroscopie et imagerie biomédicale pour diagnostics"}, {"segment": "Medical Imaging & Simulation", "nom": "Spimed-AI", "site": "https://www.spimed-ai.com", "description": "IA en imagerie ostéoarticulaire : rachis, orthopédie"}, {"segment": "Medical Imaging & Simulation", "nom": "Surgar", "site": "https://www.surgar.com", "description": "Navigation chirurgicale augmentée par réalité augmentée et IA"}, {"segment": "Medical Imaging & Simulation", "nom": "Synergiz", "site": "https://www.synergiz.fr", "description": "Réalité mixte pour simulation médicale et formation"}, {"segment": "Medical Imaging & Simulation", "nom": "Therapixel", "site": "https://www.therapixel.com", "description": "IA mammographie : aide au dépistage du cancer du sein"}, {"segment": "Medical Imaging & Simulation", "nom": "Tissium", "site": "https://www.tissium.com", "description": "Biomatériaux programmables et imagerie tissulaire"}, {"segment": "Medical Imaging & Simulation", "nom": "Tribun Health", "site": "https://www.tribun-health.com", "description": "Pathologie numérique et IA pour anatomopathologie"}, {"segment": "Medical Imaging & Simulation", "nom": "Twinsight", "site": "https://www.twinsight.fr", "description": "Jumeaux numériques médicaux pour simulation et prédiction"}, {"segment": "Medical Imaging & Simulation", "nom": "Twinical", "site": "https://www.twinical.com", "description": "Simulation clinique virtuelle et formation médicale"}, {"segment": "Medical Imaging & Simulation", "nom": "Udini", "site": "https://www.udini.fr", "description": "Plateforme de gestion et partage d'imagerie médicale"}, {"segment": "Medical Imaging & Simulation", "nom": "VeinSound", "site": "https://www.veinsound.com", "description": "Analyse échographique vasculaire par IA"}, {"segment": "Medical Imaging & Simulation", "nom": "Visible Patient", "site": "https://www.visible-patient.com", "description": "Planification chirurgicale 3D à partir d'imagerie médicale"}, {"segment": "Medical Imaging & Simulation", "nom": "VitaDX", "site": "https://www.vitadx.com", "description": "IA pour analyse d'images cytologiques"}, {"segment": "Medical Imaging & Simulation", "nom": "Vrai Heart", "site": "https://www.vraiheart.com", "description": "Simulation IA pour cardiopathies congénitales"}, {"segment": "Medical Imaging & Simulation", "nom": "Witsee", "site": "https://www.witsee.com", "description": "IA ophtalmologie : analyse de la rétine et dépistage"}, {"segment": "Robotics & Medical Devices", "nom": "AbilyCare", "site": "https://www.abilycare.com", "description": "Robot de dispensation automatisée de médicaments pour EHPAD et hôpitaux"}, {"segment": "Robotics & Medical Devices", "nom": "COG.Engines", "site": "https://www.cogengines.com", "description": "Moteurs cognitifs IA pour robotique médicale"}, {"segment": "Robotics & Medical Devices", "nom": "Ecential Robotics", "site": "https://www.ecential-robotics.com", "description": "Robot de chirurgie orthopédique pour rachis et traumatologie"}, {"segment": "Robotics & Medical Devices", "nom": "Enchanted Tools", "site": "https://www.enchanted.tools", "description": "Robots expressifs à usage médical, social et de service"}, {"segment": "Robotics & Medical Devices", "nom": "Extremis Robotics", "site": "https://www.extremis-robotics.com", "description": "Robotique chirurgicale avancée"}, {"segment": "Robotics & Medical Devices", "nom": "GanyMed", "site": "https://www.ganymed.fr", "description": "Dispositifs médicaux connectés et intelligents"}, {"segment": "Robotics & Medical Devices", "nom": "Hapo", "site": "https://www.hapo.fr", "description": "Dispositifs d'assistance au handicap et aux personnes âgées"}, {"segment": "Robotics & Medical Devices", "nom": "Inen", "site": "https://www.inen.fr", "description": "Neuromodulation IA : stimulation cérébrale personnalisée"}, {"segment": "Robotics & Medical Devices", "nom": "Leobotics", "site": "https://www.leobotics.com", "description": "Robotique logistique hospitalière : transport de médicaments et prélèvements"}, {"segment": "Robotics & Medical Devices", "nom": "Lifelines", "site": "https://www.lifelines.fr", "description": "Dispositifs médicaux connectés pour suivi patient"}, {"segment": "Robotics & Medical Devices", "nom": "LifeAZ", "site": "https://www.lifeaz.co", "description": "Défibrillateurs connectés accessibles et faciles d'usage en entreprise"}, {"segment": "Robotics & Medical Devices", "nom": "Neurinnov", "site": "https://www.neurinnov.com", "description": "Neuromodulation et exosquelettes pour rééducation neurologique"}, {"segment": "Robotics & Medical Devices", "nom": "Orixha", "site": "https://www.orixha.com", "description": "Dialyse à domicile intelligente et connectée"}, {"segment": "Robotics & Medical Devices", "nom": "Moon Surgical", "site": "https://www.moon-surgical.com", "description": "Assistance robotique intelligente en chirurgie laparoscopique"}, {"segment": "Robotics & Medical Devices", "nom": "Pulse Audition", "site": "https://www.pulseaudition.com", "description": "Audioprothèses intelligentes et personnalisées par IA"}, {"segment": "Robotics & Medical Devices", "nom": "Quantum Surgical", "site": "https://www.quantum-surgical.com", "description": "Robot d'ablation de tumeurs hépatiques guidé par IA"}, {"segment": "Robotics & Medical Devices", "nom": "RegenLife", "site": "https://www.regenlife.fr", "description": "Médecine régénérative et biomatériaux actifs"}, {"segment": "Robotics & Medical Devices", "nom": "Robeauté", "site": "https://www.robeaute.com", "description": "Micro-robot pour injection intrathécale ciblée dans le cerveau"}, {"segment": "Robotics & Medical Devices", "nom": "Robocath", "site": "https://www.robocath.com", "description": "Robot de cathétérisme vasculaire téléguidé"}, {"segment": "Robotics & Medical Devices", "nom": "SensOMe", "site": "https://www.sensome.com", "description": "Capteurs intelligents pour cathéters : caractérisation tissulaire"}, {"segment": "Robotics & Medical Devices", "nom": "Someo Solutions", "site": "https://www.someosolutions.com", "description": "Dispositifs médicaux connectés pour le sommeil"}, {"segment": "Robotics & Medical Devices", "nom": "SpineEM Robotics", "site": "https://www.spineem.com", "description": "Robotique rachis et colonne vertébrale"}, {"segment": "Robotics & Medical Devices", "nom": "SquareMind", "site": "https://www.squaremind.com", "description": "IA pour neuromodulation et dispositifs implantables"}, {"segment": "Robotics & Medical Devices", "nom": "USense", "site": "https://www.usense.fr", "description": "Capteurs santé connectés et intelligents"}, {"segment": "Robotics & Medical Devices", "nom": "UroMems", "site": "https://www.uromems.com", "description": "Sphincter artificiel connecté pour incontinence urinaire"}, {"segment": "Robotics & Medical Devices", "nom": "TheraSonic", "site": "https://www.therasonic.com", "description": "Ultrasons thérapeutiques focalisés et ciblés"}, {"segment": "Robotics & Medical Devices", "nom": "Volta Medical", "site": "https://www.volta-medical.com", "description": "Cartographie cardiaque IA pour ablation de fibrillation auriculaire"}, {"segment": "Robotics & Medical Devices", "nom": "Wandercraft", "site": "https://www.wandercraft.eu", "description": "Exosquelette autonome pour rééducation et mobilité des paraplégiques"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "ADLIN", "site": "https://www.adlin.com", "description": "Criblage phénotypique IA à haut débit pour la découverte de médicaments"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "AgentT", "site": "https://www.agentt.bio", "description": "IA agentique pour la découverte de cibles thérapeutiques"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Ai-biopharma", "site": "https://www.ai-biopharma.com", "description": "Plateforme IA pour l'optimisation du développement de médicaments"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Alphanosos", "site": "https://www.alphanosos.com", "description": "IA pour le diagnostic et le traitement des maladies rares"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "AmyBare", "site": "https://www.amybare.com", "description": "Biomarqueurs numériques Alzheimer détectés par IA"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "AQEMIA", "site": "https://www.aqemia.com", "description": "Simulation quantique et IA pour le design de molécules thérapeutiques"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Biolevate", "site": "https://www.biolevate.com", "description": "IA pour optimiser les procédés de bioproduction"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Bioptimus", "site": "https://www.bioptimus.com", "description": "Modèle fondation IA pour la biologie universelle"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "CURE", "site": "https://www.cureai.com", "description": "IA pour l'oncologie et l'optimisation des essais cliniques"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "DeepLife", "site": "https://www.deeplife.tech", "description": "Analyse cellulaire par IA pour la découverte de médicaments"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Epigene Labs", "site": "https://www.epigenelabs.com", "description": "Cibles épigénétiques par IA pour nouvelles thérapies"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "ErVimmune", "site": "https://www.ervimmune.com", "description": "IA en immunologie : ARN endogènes rétroviraux comme cibles"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "ExactCure", "site": "https://www.exactcure.com", "description": "Jumeaux numériques pharmacologiques pour personnalisation des traitements"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Generare Bio", "site": "https://www.generare.bio", "description": "Thérapies géniques de nouvelle génération optimisées par IA"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Genexpath", "site": "https://www.genexpath.com", "description": "Analyses génomiques pour oncologie de précision"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "IGYXOS Biotherapeutics", "site": "https://www.igyxos.com", "description": "Biothérapies IA pour immuno-oncologie"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Iktos", "site": "https://www.iktos.com", "description": "Design de molécules de novo par IA générative"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "ImCheck", "site": "https://www.imcheck.fr", "description": "Immunothérapies innovantes ciblant les BTN3A"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Inside", "site": "https://www.inside.fr", "description": "IA pour la sélection et optimisation d'essais cliniques en oncologie"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Insilibio", "site": "https://www.insilibio.com", "description": "Modélisation in silico pour prédire l'efficacité et la toxicité des médicaments"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Ksilink", "site": "https://www.ksilink.com", "description": "Drug discovery IA centrée sur le patient"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Kàl", "site": "https://www.kal.bio", "description": "IA pour la biologie synthétique et l'ingénierie génétique"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "MAbSilico", "site": "https://www.mabsilico.com", "description": "Design d'anticorps monoclonaux optimisé par IA"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "MedInsights", "site": "https://www.medinsights.fr", "description": "IA pour l'exploitation des données de vie réelle (RWE)"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Mnemo Therapeutics", "site": "https://www.mnemotherapeutics.com", "description": "Reprogrammation cellulaire par IA pour immunothérapies"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "MSInsight", "site": "https://www.msinsight.fr", "description": "Analyse spectrométrie de masse par IA pour biomarqueurs"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "MyXpression", "site": "https://www.myxpression.com", "description": "Médecine personnalisée génomique et expression génique"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Numa Health", "site": "https://www.numahealth.fr", "description": "IA pour l'analyse des données de santé"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Okomera", "site": "https://www.okomera.com", "description": "Tests ex vivo de médicaments sur organoïdes tumoraux patients"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "One Biosciences", "site": "https://www.onebiosciences.com", "description": "IA pour l'analyse de biopsies et pathologie computationnelle"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Orakl Oncology", "site": "https://www.orakl-oncology.com", "description": "IA pronostic oncologique et aide à la décision thérapeutique"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Oria Biosciences", "site": "https://www.oria-biosciences.com", "description": "Cibles thérapeutiques maladies métaboliques par IA"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Owkin", "site": "https://www.owkin.com", "description": "IA fédérée pour la recherche biomédicale collaborative"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Papilio.bio", "site": "https://www.papilio.bio", "description": "IA pour séquençage génomique et analyse multi-omique"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Parean Biotechnologies", "site": "https://www.parean.bio", "description": "Phénotypage immunitaire profond par IA"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "PEACCEL", "site": "https://www.peaccel.com", "description": "Design de protéines thérapeutiques par IA"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Poietis", "site": "https://www.poietis.com", "description": "Bioimpression 4D par laser pour ingénierie tissulaire"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Predicting Med", "site": "https://www.predictingmed.fr", "description": "Médecine prédictive personnalisée par IA"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Protera", "site": "https://www.protera.io", "description": "Design de protéines fonctionnelles durables par IA"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "PulseSight Therapeutics", "site": "https://www.pulsesight.com", "description": "Thérapies ciblées par IA"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Qubit Pharmaceuticals", "site": "https://www.qubit-pharmaceuticals.com", "description": "Simulation quantique pour drug design et polarisation"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "ReST Therapeutics", "site": "https://www.rest-therapeutics.com", "description": "IA pour la découverte de thérapeutiques innovantes"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "RIME Therapeutics", "site": "https://www.rimetherapeutics.com", "description": "Thérapies ARN et mécanismes innovants par IA"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Rosetta Omics", "site": "https://www.rosettaomics.com", "description": "Intégration multi-omique et IA pour biomarqueurs"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Scienta Lab", "site": "https://www.scienta-lab.com", "description": "IA pour analyses biologiques et données scientifiques"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "SeqOne", "site": "https://www.seqone.fr", "description": "Analyse génomique clinique IA : NGS et variants génétiques"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "TheraPPI", "site": "https://www.therappi.com", "description": "Interactions protéine-protéine comme cibles thérapeutiques par IA"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Theremia", "site": "https://www.theremia.fr", "description": "Thérapies thermiques ciblées et dispositifs de chauffage médical"}, {"segment": "TechBio, Biotechnology Research & Drug Development", "nom": "Whitelab Genomics", "site": "https://www.whitelab-genomics.com", "description": "Conception de thérapies géniques par IA générative"}, {"segment": "Clinical Research", "nom": "BOTdesign", "site": "https://www.botdesign.fr", "description": "Automatisation des CRF, protocoles et processus de recherche clinique"}, {"segment": "Clinical Research", "nom": "Cline", "site": "https://www.cline.health", "description": "Optimisation des essais cliniques par IA : recrutement, protocoles"}, {"segment": "Clinical Research", "nom": "Clinotopia", "site": "https://www.clinotopia.com", "description": "Plateforme SaaS de gestion complète des essais cliniques"}, {"segment": "Clinical Research", "nom": "Inato", "site": "https://www.inato.com", "description": "Marketplace d'essais cliniques IA : mise en relation sites/sponsors"}, {"segment": "Clinical Research", "nom": "Klinee", "site": "https://www.klinee.fr", "description": "Recrutement de patients pour les essais cliniques par IA"}, {"segment": "Clinical Research", "nom": "Nova in Silico", "site": "https://www.novainsilico.com", "description": "Patients virtuels et simulations in silico pour essais cliniques"}, {"segment": "Clinical Research", "nom": "Qairnel", "site": "https://www.qairnel.com", "description": "IA pour la qualité, la conformité et la gestion des risques cliniques"}, {"segment": "Clinical Research", "nom": "Skezi", "site": "https://www.skezi.eu", "description": "Plateforme e-consent numérique et gestion patient digitale pour essais"}, {"segment": "Security, Privacy & Compliance", "nom": "B-Consultant", "site": "https://www.b-consultant.fr", "description": "Conformité réglementaire (MDR, RGPD, HDS) pour la santé numérique"}, {"segment": "Security, Privacy & Compliance", "nom": "CybelAngel", "site": "https://www.cybelangel.com", "description": "Cybersécurité et protection des données de santé exposées"}, {"segment": "Security, Privacy & Compliance", "nom": "Dr Data", "site": "https://www.drdata.fr", "description": "Gouvernance et valorisation des données de santé"}, {"segment": "Security, Privacy & Compliance", "nom": "Ethik-IA", "site": "https://www.ethik-ia.com", "description": "Éthique, conformité et certification des IA en santé"}, {"segment": "Security, Privacy & Compliance", "nom": "GLIMPS", "site": "https://www.glimps.fr", "description": "Cybersécurité IA pour hôpitaux : détection de malwares avancés"}, {"segment": "Security, Privacy & Compliance", "nom": "HarfangLab", "site": "https://www.harfanglab.io", "description": "EDR cybersécurité souverain pour établissements de santé"}, {"segment": "Security, Privacy & Compliance", "nom": "Iliomad", "site": "https://www.iliomad.com", "description": "Gestion et conformité des données de santé (HDS, RGPD)"}, {"segment": "Security, Privacy & Compliance", "nom": "Naaia", "site": "https://www.naaia.fr", "description": "Conformité réglementaire des systèmes IA en santé"}, {"segment": "Security, Privacy & Compliance", "nom": "Quarkslab", "site": "https://www.quarkslab.com", "description": "Sécurité logicielle, reverse engineering et audit de dispositifs médicaux"}, {"segment": "Security, Privacy & Compliance", "nom": "Quinten", "site": "https://www.quinten.fr", "description": "IA et conformité pour données cliniques et RWE"}, {"segment": "Security, Privacy & Compliance", "nom": "Randorisec", "site": "https://www.randorisec.com", "description": "Audit et tests de sécurité des systèmes médicaux connectés"}, {"segment": "Security, Privacy & Compliance", "nom": "Riot", "site": "https://www.riot.im", "description": "Sensibilisation à la cybersécurité pour les équipes hospitalières"}, {"segment": "Security, Privacy & Compliance", "nom": "Sarus", "site": "https://www.sarus.tech", "description": "Privacy-preserving analytics : analyse de données santé sans les exposer"}, {"segment": "Security, Privacy & Compliance", "nom": "Spartacare", "site": "https://www.spartacare.fr", "description": "Conformité et sécurité des dispositifs médicaux connectés"}, {"segment": "Security, Privacy & Compliance", "nom": "TraceX", "site": "https://www.tracex.fr", "description": "Traçabilité et audit des systèmes IA de santé"}, {"segment": "Security, Privacy & Compliance", "nom": "Yogosha", "site": "https://www.yogosha.com", "description": "Plateforme de bug bounty et tests d'intrusion pour la santé"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Aguatic", "site": "https://www.aguatic.fr", "description": "Valorisation et exploitation des données hospitalières"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Arkhn", "site": "https://www.arkhn.com", "description": "Interopérabilité hospitalière et standards FHIR pour l'IA"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Cleyrop", "site": "https://www.cleyrop.com", "description": "Plateforme de valorisation des données de santé"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Codoc", "site": "https://www.codoc.fr", "description": "Codification médicale automatisée par IA (CIM-10, CCAM)"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Deepia", "site": "https://www.deepia.fr", "description": "Extraction et valorisation de données de santé structurées"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Doctoome", "site": "https://www.doctoome.fr", "description": "Marketplace de données médicales pour la recherche"}, {"segment": "Data Management, Valorization & Platforms", "nom": "EasyMedStat", "site": "https://www.easymedstat.com", "description": "Biostatistiques simplifiées et accessibles pour les cliniciens"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Euris", "site": "https://www.euris-health.com", "description": "Plateforme CRM et data pour l'industrie pharma et santé"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Foresight", "site": "https://www.foresight.bio", "description": "IA prédictive pour données biologiques et epidémiologie"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Galeon", "site": "https://www.galeon.com", "description": "Dossier patient numérique intelligent et système d'information hospitalier IA"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Hopsiia", "site": "https://www.hopsiia.fr", "description": "Analytics et valorisation des données hospitalières"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Juisci", "site": "https://www.juisci.com", "description": "Curation IA de la littérature médicale pour les professionnels"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Kap Code", "site": "https://www.kap-code.com", "description": "Real World Evidence (RWE) et données patients en vie réelle"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Klodios", "site": "https://www.klodios.com", "description": "Données patients et intelligence artificielle"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Lexistems", "site": "https://www.lexistems.com", "description": "Recherche sémantique dans les données cliniques non structurées"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Mydata-Trust", "site": "https://www.mydata-trust.com", "description": "Confiance et partage consentis des données de santé"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Neovision", "site": "https://www.neovision.fr", "description": "Vision IA pour la valorisation de données médicales"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Newclin", "site": "https://www.newclin.com", "description": "Data management en recherche clinique"}, {"segment": "Data Management, Valorization & Platforms", "nom": "NuMind", "site": "https://www.numind.ai", "description": "IA NLP pour l'extraction d'informations de documents médicaux"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Octopize", "site": "https://www.octopize.io", "description": "Anonymisation et synthèse de données de santé"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Onaos", "site": "https://www.onaos.fr", "description": "Interopérabilité sémantique et ontologies médicales"}, {"segment": "Data Management, Valorization & Platforms", "nom": "OpSciDia", "site": "https://www.opscidi.fr", "description": "Données scientifiques et aide au diagnostic"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Ospi", "site": "https://www.ospi.fr", "description": "Plateforme de gestion et partage des données patients"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Phast", "site": "https://www.phast.fr", "description": "Pharmacovigilance et gestion des données médicaments"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Qauta", "site": "https://www.qauta.com", "description": "Qualité et audit des données de santé"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Qantev", "site": "https://www.qantev.com", "description": "IA pour l'assurance santé : analyse de données et détection de fraudes"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Rhisa", "site": "https://www.rhisa.fr", "description": "Registres de données et épidémiologie de santé"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Sancare", "site": "https://www.sancare.fr", "description": "Optimisation du codage et des DRG hospitaliers par IA"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Sciencer", "site": "https://www.sciencer.ai", "description": "IA pour la découverte scientifique et l'analyse de littérature"}, {"segment": "Data Management, Valorization & Platforms", "nom": "ScoreMed", "site": "https://www.scoremed.fr", "description": "Scoring médical et prédiction par IA"}, {"segment": "Data Management, Valorization & Platforms", "nom": "TeKare", "site": "https://www.tekare.fr", "description": "Gestion et valorisation des données cliniques"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Trustii.io", "site": "https://www.trustii.io", "description": "Partage sécurisé et souverain des données de santé"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Tune Insight", "site": "https://www.tuneinsight.com", "description": "Computation confidentielle pour analyses santé multi-institutions"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Use & Share", "site": "https://www.use-and-share.fr", "description": "Valorisation et partage de données médicales"}, {"segment": "Data Management, Valorization & Platforms", "nom": "Yseop", "site": "https://www.yseop.com", "description": "NLP et génération automatique de rapports médicaux et réglementaires"}, {"segment": "Assistance & Workflows", "nom": "Advitam", "site": "https://www.advitam.fr", "description": "IA pour la gestion des ressources humaines en santé"}, {"segment": "Assistance & Workflows", "nom": "Alakin", "site": "https://www.alakin.fr", "description": "Assistant IA pour les professionnels de santé"}, {"segment": "Assistance & Workflows", "nom": "Askara", "site": "https://www.askara.ai", "description": "IA pour la codification médicale et les workflows cliniques"}, {"segment": "Assistance & Workflows", "nom": "Bimedoc", "site": "https://www.bimedoc.fr", "description": "Gestion documentaire médicale assistée par IA"}, {"segment": "Assistance & Workflows", "nom": "Dictalive", "site": "https://www.dictalive.fr", "description": "Dictée médicale IA en temps réel et comptes-rendus automatiques"}, {"segment": "Assistance & Workflows", "nom": "Doctreen", "site": "https://www.doctreen.fr", "description": "IA pour la structuration des données médicales non-structurées"}, {"segment": "Assistance & Workflows", "nom": "e-Astreinte", "site": "https://www.e-astreinte.fr", "description": "Gestion automatisée des astreintes et plannings médicaux"}, {"segment": "Assistance & Workflows", "nom": "Emeriti", "site": "https://www.emeriti.fr", "description": "IA pour la coordination des soins et des équipes médicales"}, {"segment": "Assistance & Workflows", "nom": "Elixir", "site": "https://www.elixir-ehr.fr", "description": "Dossier patient électronique intelligent et interopérable"}, {"segment": "Assistance & Workflows", "nom": "Eurekam", "site": "https://www.eurekam.fr", "description": "Analyse IA des actes chirurgicaux vidéo pour formation et qualité"}, {"segment": "Assistance & Workflows", "nom": "Esensia", "site": "https://www.esensia.fr", "description": "IA pour la gestion des soins infirmiers et la coordination"}, {"segment": "Assistance & Workflows", "nom": "Faks", "site": "https://www.faks.fr", "description": "Transmission sécurisée et dématérialisée de documents médicaux"}, {"segment": "Assistance & Workflows", "nom": "H24 Care", "site": "https://www.h24care.fr", "description": "Coordination soins et parcours patient automatisé par IA"}, {"segment": "Assistance & Workflows", "nom": "Hopia", "site": "https://www.hopia.fr", "description": "Gestion hospitalière intelligente et optimisation des ressources"}, {"segment": "Assistance & Workflows", "nom": "Hublo", "site": "https://www.hublo.com", "description": "Gestion des remplacements et plannings du personnel soignant"}, {"segment": "Assistance & Workflows", "nom": "Jaide", "site": "https://www.jaide.fr", "description": "Assistant IA pour médecins généralistes : compte-rendu et aide clinique"}, {"segment": "Assistance & Workflows", "nom": "Koduce", "site": "https://www.koduce.fr", "description": "Aide à la codification médicale automatisée"}, {"segment": "Assistance & Workflows", "nom": "Kiro", "site": "https://www.kiro.fr", "description": "IA de documentation médicale : notes cliniques automatiques"}, {"segment": "Assistance & Workflows", "nom": "Kustoma", "site": "https://www.kustoma.fr", "description": "Personnalisation du parcours patient par IA"}, {"segment": "Assistance & Workflows", "nom": "Liaison Vocale", "site": "https://www.liaisonvocale.fr", "description": "Dictée médicale vocale et génération de comptes-rendus"}, {"segment": "Assistance & Workflows", "nom": "Libheros", "site": "https://www.libheros.fr", "description": "Coordination des infirmiers libéraux par plateforme numérique"}, {"segment": "Assistance & Workflows", "nom": "Medinbox", "site": "https://www.medinbox.com", "description": "Bloc opératoire connecté et analytique IA des actes chirurgicaux"}, {"segment": "Assistance & Workflows", "nom": "Medsmart", "site": "https://www.medsmart.fr", "description": "Optimisation et sécurisation des prescriptions médicamenteuses"}, {"segment": "Assistance & Workflows", "nom": "Nabla", "site": "https://www.nabla.com", "description": "Assistant IA médical : génération automatique des comptes-rendus de consultation"}, {"segment": "Assistance & Workflows", "nom": "Nearcare", "site": "https://www.nearcare.fr", "description": "Coordination de soins de proximité et téléconsultation"}, {"segment": "Assistance & Workflows", "nom": "Oky Doky", "site": "https://www.okydoky.fr", "description": "Préparation du patient avant hospitalisation : questionnaires IA"}, {"segment": "Assistance & Workflows", "nom": "Optacare", "site": "https://www.optacare.fr", "description": "Optimisation des parcours et des soins par IA"}, {"segment": "Assistance & Workflows", "nom": "Ordoclic", "site": "https://www.ordoclic.fr", "description": "Ordonnance dématérialisée et téléprescription sécurisée"}, {"segment": "Assistance & Workflows", "nom": "Parallel", "site": "https://www.parallel.health", "description": "IA pour la gestion des soins dermatologiques"}, {"segment": "Assistance & Workflows", "nom": "Praxy.ai", "site": "https://www.praxy.ai", "description": "Assistant IA complet pour cabinets médicaux"}, {"segment": "Assistance & Workflows", "nom": "ScienceOne", "site": "https://www.scienceone.fr", "description": "IA pour la recherche clinique et la gestion de données"}, {"segment": "Assistance & Workflows", "nom": "Sclépios LA", "site": "https://www.sclepios.fr", "description": "Logiciel de gestion de cabinet médical intelligent"}, {"segment": "Assistance & Workflows", "nom": "Second Brain", "site": "https://www.secondbrain.fr", "description": "Knowledge management médical par IA"}, {"segment": "Assistance & Workflows", "nom": "Simplify", "site": "https://www.simplify-medical.fr", "description": "Simplification et automatisation des processus médicaux"}, {"segment": "Assistance & Workflows", "nom": "SmartUp", "site": "https://www.smartup.fr", "description": "Formation et coaching médical par IA"}, {"segment": "Assistance & Workflows", "nom": "Therapanacea", "site": "https://www.therapanacea.com", "description": "IA pour la radiothérapie et les workflows en oncologie"}, {"segment": "Assistance & Workflows", "nom": "Vocca.ai", "site": "https://www.vocca.ai", "description": "IA vocale pour les professionnels de santé : dictée et navigation"}, {"segment": "Assistance & Workflows", "nom": "Vulgaroo", "site": "https://www.vulgaroo.fr", "description": "Vulgarisation médicale IA pour améliorer la compréhension patient"}, {"segment": "Diagnostics & Decision Support", "nom": "Ad Scientiam", "site": "https://www.ad-scientiam.com", "description": "Essais cliniques décentralisés et biomarqueurs numériques"}, {"segment": "Diagnostics & Decision Support", "nom": "AI-Stroke", "site": "https://www.ai-stroke.com", "description": "Aide IA au diagnostic AVC : analyse IRM et scanner"}, {"segment": "Diagnostics & Decision Support", "nom": "AiiNTENSE", "site": "https://www.aiintense.fr", "description": "IA pour la médecine intensive et la réanimation"}, {"segment": "Diagnostics & Decision Support", "nom": "AlcediAG", "site": "https://www.alcediag.com", "description": "Biomarqueurs sanguins IA pour psychiatrie (dépression, schizophrénie)"}, {"segment": "Diagnostics & Decision Support", "nom": "Belle.ai", "site": "https://www.belle.ai", "description": "IA dermatologie : analyse de la peau pour les professionnels"}, {"segment": "Diagnostics & Decision Support", "nom": "Blazar", "site": "https://www.blazar.ai", "description": "Diagnostic IA des maladies rares par phénotypage profond"}, {"segment": "Diagnostics & Decision Support", "nom": "Braintale", "site": "https://www.braintale.fr", "description": "IA en neurologie : biomarqueurs cérébraux et aide diagnostique"}, {"segment": "Diagnostics & Decision Support", "nom": "Carefla", "site": "https://www.carefla.fr", "description": "Aide à la décision clinique par IA"}, {"segment": "Diagnostics & Decision Support", "nom": "Datexim", "site": "https://www.datexim.com", "description": "Diagnostic précoce de pathologies par IA"}, {"segment": "Diagnostics & Decision Support", "nom": "DiaDeep", "site": "https://www.diadeep.fr", "description": "IA diabétologie : dépistage rétinopathie diabétique"}, {"segment": "Diagnostics & Decision Support", "nom": "Dolk", "site": "https://www.dolk.fr", "description": "Support diagnostique IA en clinique"}, {"segment": "Diagnostics & Decision Support", "nom": "DrugOptimal", "site": "https://www.drugoptimal.fr", "description": "Optimisation thérapeutique et personnalisation des traitements"}, {"segment": "Diagnostics & Decision Support", "nom": "Geodistics", "site": "https://www.geodistics.com", "description": "IA épidémiologie et données géospatiales de santé"}, {"segment": "Diagnostics & Decision Support", "nom": "Hope Valley AI", "site": "https://www.hopevalley.ai", "description": "IA décisionnelle en oncologie et aide thérapeutique"}, {"segment": "Diagnostics & Decision Support", "nom": "Hometrix Health", "site": "https://www.hometrix.fr", "description": "Suivi domicile et prédiction par IA"}, {"segment": "Diagnostics & Decision Support", "nom": "Imageens", "site": "https://www.imageens.com", "description": "IA cardio-pédiatrique : morphologie et détection précoce"}, {"segment": "Diagnostics & Decision Support", "nom": "KanopyMed", "site": "https://www.kanopimed.fr", "description": "IA pour médecine interne et maladies complexes"}, {"segment": "Diagnostics & Decision Support", "nom": "Keenturtle", "site": "https://www.keenturtle.com", "description": "IA pour cardiologie : analyse ECG et arythmies"}, {"segment": "Diagnostics & Decision Support", "nom": "Lifen", "site": "https://www.lifen.fr", "description": "Interopérabilité et partage de données cliniques entre professionnels"}, {"segment": "Diagnostics & Decision Support", "nom": "Magic LEMP", "site": "https://www.magiclemp.fr", "description": "Aide au diagnostic des pathologies neurologiques par IA"}, {"segment": "Diagnostics & Decision Support", "nom": "Medvir", "site": "https://www.medvir.fr", "description": "IA virologie : diagnostic et suivi maladies infectieuses"}, {"segment": "Diagnostics & Decision Support", "nom": "NeoNeuro", "site": "https://www.neoneuro.com", "description": "Aptamères et diagnostic neurologique par IA"}, {"segment": "Diagnostics & Decision Support", "nom": "Noé", "site": "https://www.noe.health", "description": "IA hépatologie : suivi maladies chroniques du foie"}, {"segment": "Diagnostics & Decision Support", "nom": "NOVIGA Health Data Science", "site": "https://www.noviga.fr", "description": "Analytics et IA en pharmacovigilance et médicament"}, {"segment": "Diagnostics & Decision Support", "nom": "O-Kidia", "site": "https://www.okidia.fr", "description": "IA pédiatrique : aide au diagnostic chez l'enfant"}, {"segment": "Diagnostics & Decision Support", "nom": "Omicure", "site": "https://www.omicure.fr", "description": "IA omique pour des diagnostics précis en oncologie"}, {"segment": "Diagnostics & Decision Support", "nom": "OneReck", "site": "https://www.onereck.fr", "description": "IA pour la prédiction du risque de fractures osseuses"}, {"segment": "Diagnostics & Decision Support", "nom": "Posos", "site": "https://www.posos.co", "description": "Base de connaissances médicaments intelligente par IA"}, {"segment": "Diagnostics & Decision Support", "nom": "Presage", "site": "https://www.presage.bio", "description": "IA pronostic : prédiction du vieillissement cellulaire"}, {"segment": "Diagnostics & Decision Support", "nom": "Previa", "site": "https://www.previa.fr", "description": "Prévention et diagnostic précoce par IA"}, {"segment": "Diagnostics & Decision Support", "nom": "PulseLife", "site": "https://www.pulselife.fr", "description": "IA cardiologie et monitoring cardiaque"}, {"segment": "Diagnostics & Decision Support", "nom": "Quinten Health", "site": "https://www.quinten.fr", "description": "Analytics cliniques avancés et RWE par IA"}, {"segment": "Diagnostics & Decision Support", "nom": "Sensoria Analytics", "site": "https://www.sensoria.ai", "description": "Analyse de données capteurs et IA en santé"}, {"segment": "Diagnostics & Decision Support", "nom": "Primaa", "site": "https://www.primaa.fr", "description": "IA anatomopathologie cervicale : dépistage cancer du col utérin"}, {"segment": "Diagnostics & Decision Support", "nom": "Surge", "site": "https://www.surge.fr", "description": "IA pour les urgences : aide au triage et à la priorisation"}, {"segment": "Diagnostics & Decision Support", "nom": "SynapseMed", "site": "https://www.synapsemed.fr", "description": "Aide à la décision médicale par IA"}, {"segment": "Diagnostics & Decision Support", "nom": "Yneuro", "site": "https://www.yneuro.com", "description": "IA en neurologie : détection épilepsie et suivi"}, {"segment": "Diagnostics & Decision Support", "nom": "Ziwig", "site": "https://www.ziwig.com", "description": "Diagnostic de l'endométriose par IA et analyse salivaire"}, {"segment": "DTx & Patient Engagement", "nom": "Aalia.tech", "site": "https://www.aalia.tech", "description": "DTx et accompagnement patient IA par conversationnel"}, {"segment": "DTx & Patient Engagement", "nom": "Aliae", "site": "https://www.aliae.fr", "description": "Application thérapeutique digitale pour la santé mentale"}, {"segment": "DTx & Patient Engagement", "nom": "Alix", "site": "https://www.alix.fr", "description": "DTx pour maladies chroniques : suivi et accompagnement"}, {"segment": "DTx & Patient Engagement", "nom": "Anamnèse", "site": "https://www.anamnese.app", "description": "Collecte automatisée de l'anamnèse patient avant consultation"}, {"segment": "DTx & Patient Engagement", "nom": "AppThera", "site": "https://www.appthera.fr", "description": "DTx et thérapies numériques prescriptibles"}, {"segment": "DTx & Patient Engagement", "nom": "Better World", "site": "https://www.betterworld.fr", "description": "Engagement patient et prévention par IA"}, {"segment": "DTx & Patient Engagement", "nom": "C2Care", "site": "https://www.c2care.com", "description": "Réalité virtuelle thérapeutique : phobies, douleur, rééducation"}, {"segment": "DTx & Patient Engagement", "nom": "Carenity", "site": "https://www.carenity.com", "description": "Communauté de patients atteints de maladies chroniques"}, {"segment": "DTx & Patient Engagement", "nom": "Diampark", "site": "https://www.diampark.fr", "description": "DTx diabète : gestion et accompagnement personnalisé"}, {"segment": "DTx & Patient Engagement", "nom": "EmobrT", "site": "https://www.emobrt.fr", "description": "DTx pour les troubles émotionnels et le burn-out"}, {"segment": "DTx & Patient Engagement", "nom": "Foodvisor", "site": "https://www.foodvisor.io", "description": "IA nutritionnelle : analyse et suivi alimentaire par photo"}, {"segment": "DTx & Patient Engagement", "nom": "Hellopalo", "site": "https://www.hellopalo.fr", "description": "Engagement patient en oncologie"}, {"segment": "DTx & Patient Engagement", "nom": "Heloa", "site": "https://www.heloa.fr", "description": "Santé pédiatrique et parentalité assistée par IA"}, {"segment": "DTx & Patient Engagement", "nom": "IMM", "site": "https://www.imm.fr", "description": "DTx immunologie : suivi et adhérence"}, {"segment": "DTx & Patient Engagement", "nom": "Klava Innovation", "site": "https://www.klavainnovation.fr", "description": "Innovation thérapeutique digitale"}, {"segment": "DTx & Patient Engagement", "nom": "Kor", "site": "https://www.kor.fr", "description": "DTx rééducation et kinésithérapie"}, {"segment": "DTx & Patient Engagement", "nom": "Lixi", "site": "https://www.lixi.fr", "description": "DTx pour les troubles anxieux et l'anxiété"}, {"segment": "DTx & Patient Engagement", "nom": "Luna", "site": "https://www.luna.fr", "description": "DTx sommeil : traitement de l'insomnie par TCC numérique"}, {"segment": "DTx & Patient Engagement", "nom": "Mapatho", "site": "https://www.mapatho.fr", "description": "Suivi et cartographie du parcours du patient chronique"}, {"segment": "DTx & Patient Engagement", "nom": "Moka Care", "site": "https://www.moka.care", "description": "Santé mentale des salariés : soutien psychologique entreprise"}, {"segment": "DTx & Patient Engagement", "nom": "Monka", "site": "https://www.monka.fr", "description": "DTx maladies chroniques"}, {"segment": "DTx & Patient Engagement", "nom": "My S Life", "site": "https://www.myslife.fr", "description": "DTx sclérose en plaques : suivi symptômes et adhérence"}, {"segment": "DTx & Patient Engagement", "nom": "Observia", "site": "https://www.observia.com", "description": "Amélioration de l'adhérence thérapeutique par IA comportementale"}, {"segment": "DTx & Patient Engagement", "nom": "Omena", "site": "https://www.omena.fr", "description": "DTx oncologie : accompagnement patient et gestion effets secondaires"}, {"segment": "DTx & Patient Engagement", "nom": "Padoa", "site": "https://www.padoa.fr", "description": "Santé au travail : logiciel de médecine du travail IA"}, {"segment": "DTx & Patient Engagement", "nom": "Poppins", "site": "https://www.poppins.fr", "description": "DTx sommeil de l'enfant : troubles du sommeil pédiatrique"}, {"segment": "DTx & Patient Engagement", "nom": "Predilife", "site": "https://www.predilife.com", "description": "Prévention santé et DTx : évaluation du risque personnalisé"}, {"segment": "DTx & Patient Engagement", "nom": "Teale", "site": "https://www.teale.fr", "description": "Santé mentale des salariés : détection et soutien IA"}, {"segment": "DTx & Patient Engagement", "nom": "ThIA - Santé Mentale", "site": "https://www.thia.fr", "description": "IA pour la santé mentale et l'accompagnement thérapeutique"}, {"segment": "DTx & Patient Engagement", "nom": "Virtuosis AI", "site": "https://www.virtuosis.ai", "description": "Coach santé virtuel IA : accompagnement personnalisé"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Apneal", "site": "https://www.apneal.fr", "description": "Dépistage IA de l'apnée du sommeil à domicile"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "BeParentalis", "site": "https://www.beparentalis.fr", "description": "Suivi périnatal et grossesse connectée"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "BioSency", "site": "https://www.biosency.com", "description": "Capteurs biométriques continus pour monitoring clinique"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "BioSerenity", "site": "https://www.bioserenity.com", "description": "Electrodes intelligentes et monitoring neurologique (EEG)"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "BodyCAP", "site": "https://www.bodycap-medical.com", "description": "Capteurs ingérables de température corporelle en temps réel"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Calmedica", "site": "https://www.calmedica.com", "description": "Chatbot SMS pour le suivi patient post-opératoire et chronique"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "CareLine Solutions", "site": "https://www.carelinett.fr", "description": "Télésuivi infirmier à domicile pour personnes dépendantes"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Charles", "site": "https://www.charles.co", "description": "Télémédecine spécialisée en santé sexuelle masculine"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Chronolife", "site": "https://www.chronolife.net", "description": "T-shirt connecté pour monitoring cardiaque et respiratoire continu"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "DentalMonitoring", "site": "https://www.dental-monitoring.com", "description": "Orthodontie et suivi dentaire IA à distance"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Diabeloop", "site": "https://www.diabeloop.com", "description": "Pancréas artificiel et boucle fermée pour diabète type 1"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Ensweet", "site": "https://www.ensweet.fr", "description": "Suivi nutrition et santé connectée"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "DTECTIO", "site": "https://www.dtectio.com", "description": "Détection précoce de pathologies par IA"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Foormi", "site": "https://www.foormi.fr", "description": "Monitoring podologique : semelles connectées et IA"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "GlookoXT", "site": "https://www.glooko.com", "description": "Gestion et analyse des données diabète, monitoring glycémique"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Gynger", "site": "https://www.gynger.fr", "description": "Santé féminine et gynécologie connectée"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "i-Virtual", "site": "https://www.i-virtual.fr", "description": "Téléconsultation et télémédecine"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Implicity", "site": "https://www.implicity.com", "description": "Monitoring cardiaque des dispositifs implantés par IA"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Life Plus", "site": "https://www.lifeplus.fr", "description": "Monitoring santé des seniors à domicile"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "MEDADOM", "site": "https://www.medadom.com", "description": "Télémédecine et cabines de téléconsultation connectées"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "MHcomm", "site": "https://www.mhcomm.fr", "description": "Coordination et télésuivi des patients à domicile"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "MISSIA", "site": "https://www.missia.fr", "description": "IA suivi des maladies inflammatoires chroniques"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Mooacare", "site": "https://www.mooacare.fr", "description": "Monitoring de la santé mentale par IA"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "NAOX Technologies", "site": "https://www.naox.fr", "description": "Oxymétrie et monitoring respiratoire"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Okeiro", "site": "https://www.okeiro.fr", "description": "Suivi de la rééducation connectée"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "OSO", "site": "https://www.oso.fr", "description": "Monitoring chirurgie ambulatoire"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "OuiHelp", "site": "https://www.ouihelp.fr", "description": "Aide à domicile des seniors assistée par IA"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Pixacare", "site": "https://www.pixacare.com", "description": "Suivi de cicatrisation et plaies chroniques par IA et photo"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "PrediMed Technology", "site": "https://www.predimed.fr", "description": "IA pour la prédiction de risques médicaux"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Quantia Healthcare", "site": "https://www.quantia.fr", "description": "Télésuivi et analytics patients"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Remedee", "site": "https://www.remedee.com", "description": "Stimulation des endorphines par bracelet connecté"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Resilience", "site": "https://www.resilience.care", "description": "Suivi numérique et connecté du cancer"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Grofim", "site": "https://www.grofim.fr", "description": "Monitoring de la croissance et pédiatrie"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Satelia", "site": "https://www.satelia.fr", "description": "Monitoring neurologique IA"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Sêmeia", "site": "https://www.semeia.fr", "description": "Suivi santé personnalisé par IA"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Sonaid", "site": "https://www.sonaid.fr", "description": "Echographie guidée IA en mobilité"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Ted&Co", "site": "https://www.tedandco.fr", "description": "DTx et suivi patient personnalisé"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Tilak", "site": "https://www.tilak.care", "description": "Ophtalmologie digitale : monitoring de la rétine par IA"}, {"segment": "Monitoring Solutions & Telehealth", "nom": "Withings", "site": "https://www.withings.com", "description": "Objets connectés santé grand public : balances, montres, tensiomètres"}];
+
+/* ===== Configuration des domaines ===== */
+const SEGMENTS = [
+  ["Medical Imaging & Simulation","Imagerie médicale & simulation","var(--seg-imaging)"],
+  ["TechBio, Biotechnology Research & Drug Development","TechBio & développement de médicaments","var(--seg-techbio)"],
+  ["Monitoring Solutions & Telehealth","Télésurveillance & télésanté","var(--seg-monitoring)"],
+  ["Assistance & Workflows","Assistance & flux de travail","var(--seg-workflows)"],
+  ["Diagnostics & Decision Support","Diagnostic & aide à la décision","var(--seg-diagnostics)"],
+  ["Data Management, Valorization & Platforms","Données, valorisation & plateformes","var(--seg-data)"],
+  ["DTx & Patient Engagement","Thérapies numériques & engagement patient","var(--seg-dtx)"],
+  ["Robotics & Medical Devices","Robotique & dispositifs médicaux","var(--seg-robotics)"],
+  ["Security, Privacy & Compliance","Sécurité, confidentialité & conformité","var(--seg-security)"],
+  ["Clinical Research","Recherche clinique","var(--seg-clinical)"]
+];
+const SEG_COLOR = {}, SEG_LABEL = {};
+SEGMENTS.forEach(([key,label,color])=>{SEG_COLOR[key]=color;SEG_LABEL[key]=label;});
+
+/* ===== Champs d'enrichissement (structure prête, activés seulement si des données existent) =====
+   Pour activer un filtre plus tard : ajouter le champ correspondant dans les objets STARTUPS
+   (ex. "cas_usage":["Réduction du no-show"]). Tant qu'aucune startup ne porte de valeur,
+   le groupe de filtres reste masqué et aucune donnée n'est inventée. */
+const ENRICHMENT = [
+  {field:"cas_usage",      label:"Cas d'usage",        multi:true},
+  {field:"type_etablissement_cible", label:"Établissement cible", multi:true},
+  {field:"maturite",       label:"Maturité",           multi:false},
+  {field:"certification_reglementaire", label:"Statut réglementaire", multi:false},
+  {field:"interoperabilite", label:"Interopérabilité",  multi:false},
+  {field:"preuves_cliniques", label:"Preuves cliniques", multi:false}
+];
+
+/* ===== Utilitaires ===== */
+const norm = s => (s||"").toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+const $ = s => document.querySelector(s);
+const collator = new Intl.Collator("fr",{sensitivity:"base"});
+
+/* ===== État ===== */
+const state = { q:"", segments:new Set(), sort:"alpha", compare:[] };
+const MAX_COMPARE = 3;
+
+/* ===== Initialisation ===== */
+function initStats(){
+  $("#stat-total").textContent = STARTUPS.length;
+  $("#stat-seg").textContent = new Set(STARTUPS.map(s=>s.segment)).size;
+}
+
+function initFilters(){
+  const counts = {};
+  STARTUPS.forEach(s=>counts[s.segment]=(counts[s.segment]||0)+1);
+  const box = $("#filters");
+  SEGMENTS.forEach(([key,label,color])=>{
+    if(!counts[key]) return;
+    const b = document.createElement("button");
+    b.className="chip"; b.type="button"; b.setAttribute("aria-pressed","false");
+    b.style.setProperty("--c",color);
+    b.dataset.seg=key;
+    b.innerHTML=`<span class="dot"></span>${label}<span class="cnt">${counts[key]}</span>`;
+    b.addEventListener("click",()=>{
+      if(state.segments.has(key)) state.segments.delete(key); else state.segments.add(key);
+      b.setAttribute("aria-pressed", state.segments.has(key));
+      syncURL(); render();
+    });
+    box.appendChild(b);
+  });
+  // bouton réinitialiser
+  const r = document.createElement("button");
+  r.className="reset"; r.id="resetBtn"; r.type="button"; r.textContent="Tout réinitialiser";
+  r.addEventListener("click",resetAll);
+  box.appendChild(r);
+}
+
+function resetAll(){
+  state.q=""; state.segments.clear();
+  $("#q").value=""; $("#searchBox").classList.remove("has-value");
+  document.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed","false"));
+  syncURL(); render();
+}
+
+/* ===== Filtrage + tri ===== */
+function getFiltered(){
+  const q = norm(state.q);
+  let list = STARTUPS.filter(s=>{
+    if(state.segments.size && !state.segments.has(s.segment)) return false;
+    if(q && !(norm(s.nom).includes(q) || norm(s.description).includes(q) || norm(SEG_LABEL[s.segment]||"").includes(q))) return false;
+    return true;
+  });
+  if(state.sort==="segment"){
+    list.sort((a,b)=> collator.compare(SEG_LABEL[a.segment]||a.segment,SEG_LABEL[b.segment]||b.segment) || collator.compare(a.nom,b.nom));
+  } else {
+    list.sort((a,b)=> collator.compare(a.nom,b.nom));
+  }
+  return list;
+}
+
+/* ===== Rendu cartes ===== */
+function cardHTML(s){
+  const color = SEG_COLOR[s.segment]||"var(--ink-faint)";
+  const segLabel = SEG_LABEL[s.segment]||s.segment;
+  const host = (()=>{try{return new URL(s.site).hostname.replace(/^www\./,"");}catch(e){return "site";}})();
+  const id = "id"+btoa(unescape(encodeURIComponent(s.nom))).replace(/[^a-z0-9]/gi,"");
+  // tags d'enrichissement si présents
+  let enrich="";
+  ENRICHMENT.forEach(e=>{
+    const v=s[e.field];
+    if(v && (Array.isArray(v)?v.length:true)){
+      const arr=Array.isArray(v)?v:[v];
+      enrich+=arr.map(x=>`<span class="tag">${escapeHTML(x)}</span>`).join("");
+    }
+  });
+  const selected = state.compare.includes(s.nom);
+  const disabled = !selected && state.compare.length>=MAX_COMPARE;
+  return `<article class="card${selected?' selected':''}" style="--c:${color}">
+    <span class="seg"><span class="dot"></span>${segLabel}</span>
+    <h3>${escapeHTML(s.nom)}</h3>
+    <p>${escapeHTML(s.description)}</p>
+    ${enrich?`<div class="enrich">${enrich}</div>`:""}
+    <div class="foot">
+      <a class="visit" href="${escapeAttr(s.site)}" target="_blank" rel="noopener noreferrer" aria-label="Visiter le site de ${escapeAttr(s.nom)} (nouvel onglet)">
+        ${host}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+      </a>
+      <button class="cmp-btn${selected?' on':''}" data-cmp="${escapeAttr(s.nom)}" ${disabled?'disabled':''} aria-pressed="${selected}">
+        ${selected?'✓ Sélectionné':'Comparer'}
+      </button>
+    </div>
+  </article>`;
+}
+
+function render(){
+  const list = getFiltered();
+  const grid = $("#grid");
+  grid.innerHTML = list.map(cardHTML).join("");
+  // compteur
+  const total = STARTUPS.length;
+  $("#count").innerHTML = list.length===total
+    ? `<b>${total}</b> solutions`
+    : `<b>${list.length}</b> solution${list.length>1?'s':''} sur ${total}`;
+  // état vide
+  $("#empty").classList.toggle("show", list.length===0);
+  grid.style.display = list.length===0 ? "none":"grid";
+  // reset visible ?
+  $("#resetBtn").classList.toggle("show", !!(state.q || state.segments.size));
+  // brancher les boutons comparer
+  grid.querySelectorAll("[data-cmp]").forEach(btn=>{
+    btn.addEventListener("click",()=>toggleCompare(btn.dataset.cmp));
+  });
+}
+
+/* ===== Comparaison ===== */
+function toggleCompare(nom){
+  const i = state.compare.indexOf(nom);
+  if(i>=0) state.compare.splice(i,1);
+  else { if(state.compare.length>=MAX_COMPARE) return; state.compare.push(nom); }
+  renderTray(); render();
+}
+function renderTray(){
+  const tray=$("#tray"), items=$("#trayItems");
+  tray.classList.toggle("show", state.compare.length>0);
+  items.innerHTML = state.compare.map(n=>
+    `<span class="pill">${escapeHTML(n)}<button data-rm="${escapeAttr(n)}" aria-label="Retirer ${escapeAttr(n)}">×</button></span>`
+  ).join("");
+  items.querySelectorAll("[data-rm]").forEach(b=>b.addEventListener("click",()=>toggleCompare(b.dataset.rm)));
+  $("#trayCompare").disabled = state.compare.length<2;
+  $("#trayCompare").textContent = `Comparer${state.compare.length?` (${state.compare.length})`:''}`;
+}
+function openCompare(){
+  if(state.compare.length<2) return;
+  const items = state.compare.map(n=>STARTUPS.find(s=>s.nom===n)).filter(Boolean);
+  $("#cmpGrid").style.gridTemplateColumns=`repeat(${items.length},1fr)`;
+  $("#cmpGrid").innerHTML = items.map(s=>{
+    const color=SEG_COLOR[s.segment]||"var(--ink-faint)";
+    return `<div class="cmp-col" style="--c:${color}">
+      <span class="seg"><span class="dot"></span>${SEG_LABEL[s.segment]||s.segment}</span>
+      <h3>${escapeHTML(s.nom)}</h3>
+      <p>${escapeHTML(s.description)}</p>
+      <a href="${escapeAttr(s.site)}" target="_blank" rel="noopener noreferrer">Visiter le site →</a>
+    </div>`;
+  }).join("");
+  const bg=$("#modalBg"); bg.classList.add("show");
+  $("#modalClose").focus();
+}
+function closeCompare(){ $("#modalBg").classList.remove("show"); }
+
+/* ===== URL (partage d'une recherche via le hash) ===== */
+function syncURL(){
+  // Le partage de recherche via l'URL n'est possible que hors cadre sandboxé.
+  // Dans un iframe restreint (aperçu, certaines intégrations), history.replaceState
+  // lève une exception de sécurité : on la neutralise pour ne jamais bloquer le filtrage.
+  try{
+    const st={q:state.q,seg:[...state.segments],sort:state.sort};
+    const empty = !st.q && !st.seg.length && st.sort==="alpha";
+    history.replaceState(null,"", empty ? location.pathname : "#"+encodeURIComponent(JSON.stringify(st)));
+  }catch(e){/* contexte sandboxé : partage par URL indisponible, sans incidence sur l'outil */}
+}
+function loadURL(){
+  if(!location.hash) return;
+  try{
+    const st=JSON.parse(decodeURIComponent(location.hash.slice(1)));
+    if(st.q){state.q=st.q;$("#q").value=st.q;$("#searchBox").classList.add("has-value");}
+    if(Array.isArray(st.seg)) st.seg.forEach(k=>state.segments.add(k));
+    if(st.sort){state.sort=st.sort;$("#sort").value=st.sort;}
+    document.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed", state.segments.has(c.dataset.seg)));
+  }catch(e){/* hash invalide, ignoré */}
+}
+
+/* ===== Sécurité d'affichage ===== */
+function escapeHTML(s){return (s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
+function escapeAttr(s){return escapeHTML(s);}
+
+/* ===== Écouteurs ===== */
+let t;
+$("#q").addEventListener("input",e=>{
+  state.q=e.target.value;
+  $("#searchBox").classList.toggle("has-value",!!state.q);
+  clearTimeout(t); t=setTimeout(()=>{syncURL();render();},90);
+});
+$("#clearQ").addEventListener("click",()=>{
+  state.q="";$("#q").value="";$("#searchBox").classList.remove("has-value");$("#q").focus();syncURL();render();
+});
+$("#sort").addEventListener("change",e=>{state.sort=e.target.value;syncURL();render();});
+$("#emptyReset").addEventListener("click",resetAll);
+$("#trayClear").addEventListener("click",()=>{state.compare=[];renderTray();render();});
+$("#trayCompare").addEventListener("click",openCompare);
+$("#modalClose").addEventListener("click",closeCompare);
+$("#modalBg").addEventListener("click",e=>{if(e.target===$("#modalBg"))closeCompare();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeCompare();});
+
+/* ===== Démarrage ===== */
+initStats();
+initFilters();
+loadURL();
+renderTray();
+render();
+</script>
+</body>
+</html>
